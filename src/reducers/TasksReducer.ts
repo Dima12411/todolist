@@ -2,7 +2,7 @@ import {TasksStateType} from "../App";
 import {v1} from "uuid";
 
 
-export const TasksReducer = (state: TasksStateType, action: allTasksActionType) => {
+export const TasksReducer = (state: TasksStateType, action: allTasksActionType): TasksStateType => {
     switch (action.type) {
         case "ADD-TASK": {
             let newTask = {id: v1(), title: action.payload.title, isDone: false};
