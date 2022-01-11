@@ -22,7 +22,7 @@ test("add task from todolist", () => {
         type: "ADD-TASK",
         payload: {
             title: newTitle,
-            id: todolistId1
+            todolistId: todolistId1
         }
     })
 

@@ -2,13 +2,26 @@ import {TasksStateType} from "../App";
 import {v1} from "uuid";
 
 
-export const TasksReducer = (state: TasksStateType, action: allTasksActionType): TasksStateType => {
+let todolistId1 = v1();
+let todolistId2 = v1();
+let initialState: TasksStateType = {
+    [todolistId1]: [
+        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS", isDone: true},
+    ],
+    [todolistId2]: [
+        {id: v1(), title: "Milk", isDone: true},
+        {id: v1(), title: "React Book", isDone: true},
+    ],
+}
+
+export const TasksReducer = (state = initialState, action: allTasksActionType) => {
     switch (action.type) {
         case "ADD-TASK": {
             let newTask = {id: v1(), title: action.payload.title, isDone: false};
             return {
                 ...state,
-                [action.payload.id]: [newTask, ...state[action.payload.id]]
+                [action.payload.todolistId]: [newTask, ...state[action.payload.todolistId]]
             }
         }
         case "REMOVE-TASK": {
@@ -61,7 +74,7 @@ export const addTaskAC = (title: string, todolistId: string) => {
         type: "ADD-TASK",
         payload: {
             title: title,
-            id: todolistId
+            todolistId: todolistId
         }
     } as const
 }
