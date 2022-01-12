@@ -2,8 +2,8 @@ import {FilterValuesType, TodolistType} from "../App";
 import {v1} from "uuid";
 
 
-let todolistId1 = v1();
-let todolistId2 = v1();
+export let todolistId1 = v1();
+export let todolistId2 = v1();
 let initialState: Array<TodolistType> = [
     {id: todolistId1, title: "What to learn", filter: "all"},
     {id: todolistId2, title: "What to buy", filter: "all"}
@@ -15,8 +15,8 @@ export const TodolistsReducer = (state = initialState, action: allTodolistAction
             return state.filter(f => f.id !== action.payload.id)
         }
         case "CHANGE-FILTER-TODOLIST": {
-            state.map(m => m.id === action.payload.id ? {...action, filter: action.payload.filter} : m)
-            return state
+            return state.map(m => m.id === action.payload.id ?
+                {...m, filter: action.payload.filter} : m)
         }
         case "ADD-TODOLIST": {
             let newTodolist: TodolistType = {id: action.payload.id, title: action.payload.title, filter: 'all'}

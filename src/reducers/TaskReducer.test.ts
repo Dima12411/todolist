@@ -1,6 +1,23 @@
 import {v1} from "uuid";
-import {useReducer} from "react";
 import {TasksReducer} from "./TasksReducer";
+import {TasksStateType} from "../App";
+
+let todolistId1: string
+let todolistId2: string
+let startState: TasksStateType
+
+beforeEach(() => {
+    startState = {
+        [todolistId1]: [
+            {id: v1(), title: "HTML&CSS", isDone: true},
+            {id: v1(), title: "JS", isDone: true}
+        ],
+        [todolistId2]: [
+            {id: v1(), title: "Milk", isDone: true},
+            {id: v1(), title: "React Book", isDone: true}
+        ]
+    }
+})
 
 test("add task from todolist", () => {
     let todolistId1 = v1();

@@ -1,17 +1,15 @@
 import {TasksStateType} from "../App";
 import {v1} from "uuid";
+import {todolistId1, todolistId2} from "./TodolistsReducer";
 
-
-let todolistId1 = v1();
-let todolistId2 = v1();
 let initialState: TasksStateType = {
     [todolistId1]: [
         {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
+        {id: v1(), title: "JS", isDone: false},
     ],
     [todolistId2]: [
         {id: v1(), title: "Milk", isDone: true},
-        {id: v1(), title: "React Book", isDone: true},
+        {id: v1(), title: "React Book", isDone: false},
     ],
 }
 
@@ -69,12 +67,12 @@ type changeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type addArrayForTodolistType = ReturnType<typeof addArrayForTodolistAC>
 type removeArrayForTodolistType = ReturnType<typeof removeArrayForTodolistAC>
 
-export const addTaskAC = (title: string, todolistId: string) => {
+export const addTaskAC = (todolistId: string, title: string ) => {
     return {
         type: "ADD-TASK",
         payload: {
+            todolistId: todolistId,
             title: title,
-            todolistId: todolistId
         }
     } as const
 }
