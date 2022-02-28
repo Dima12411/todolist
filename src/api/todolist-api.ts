@@ -1,4 +1,5 @@
 import axios from "axios";
+import {FilterValuesType} from "../state/todolists-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -19,8 +20,22 @@ type GetResponseType = {
     id: string
     order: number
     title: string
+    filter: FilterValuesType
 }
 
+type GetTasksResponse = {
+    description: string
+    title: string
+    completed: boolean
+    status: string
+    priority: string
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: string
+    addedDate: string
+}
 
 export const todolistApi = {
     getTodolists() {
@@ -34,5 +49,8 @@ export const todolistApi = {
     },
     updateTodolistTitle(todolistId: string, title: string) {
         return instance.put<BaseResponseType>(`todo-lists/${todolistId}`, {title})
+    },
+    getTasks(todolistId: string) {
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     }
 }
