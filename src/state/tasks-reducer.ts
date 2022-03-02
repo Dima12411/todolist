@@ -29,6 +29,11 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             stateCopy[action.todolistId] = newTasks;
             return stateCopy;
         }
+        case 'SET-TASKS': {
+            const stateCopy = {...state}
+            stateCopy[action.todolistId] = action.tasks
+            return stateCopy
+        }
         case 'CHANGE-TASK-STATUS': {
             let todolistTasks = state[action.todolistId];
             let newTasksArray = todolistTasks
@@ -39,7 +44,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         }
         case 'CHANGE-TASK-TITLE': {
             let todolistTasks = state[action.todolistId];
-            // найдём нужную таску:
             let newTasksArray = todolistTasks
                 .map(t => t.id === action.taskId ? {...t, title: action.title} : t);
 
@@ -78,6 +82,7 @@ type ActionsType =
     | ReturnType<typeof addTodolistAC>
     | ReturnType<typeof removeTodolistAC>
     | ReturnType<typeof setTodosAC>
+    | ReturnType<typeof setTasksAC>
 
 export const removeTaskAC = (taskId: string, todolistId: string) => ({
     type: 'REMOVE-TASK',
@@ -97,12 +102,22 @@ export const changeTaskTitleAC = (taskId: string, title: string, todolistId: str
     todolistId,
     taskId
 }) as const
+export const setTasksAC = (todolistId: string, tasks: Array<TaskType>, ) => ({type: 'SET-TASKS', todolistId, tasks}) as const
 
-export const setTasksTC = (todoId: string) => {
+export const setTasksTC = (title: string, todolistId: string) => {
     return (dispatch: Dispatch) => {
-        todolistApi.getTasks(todoId)
+        todolistApi.createTasks(todolistId, title)
             .then((res) => {
-
+                dispatch(addTaskAC(title, todolistId))
+            })
+    }
+}
+export const fetchTasksTC = (todolistId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistApi.getTasks(todolistId)
+            .then((res) => {
+                const tasks = res.data.items
+                dispatch(setTasksAC(todolistId, tasks))
             })
     }
 }
