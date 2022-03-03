@@ -1,9 +1,10 @@
-import {TaskType} from '../Todolist';
 import {v1} from 'uuid';
 import {addTodolistAC, removeTodolistAC, setTodosAC} from './todolists-reducer';
 import {TasksStateType} from '../App';
 import { Dispatch } from 'redux';
-import {todolistApi} from "../api/todolist-api";
+import {todolistsAPI} from "../api/todolists-api";
+import {TaskType} from "../Todolist";
+
 
 
 const initialState: TasksStateType = {}
@@ -102,24 +103,24 @@ export const changeTaskTitleAC = (taskId: string, title: string, todolistId: str
     todolistId,
     taskId
 }) as const
-export const setTasksAC = (todolistId: string, tasks: Array<TaskType>, ) => ({type: 'SET-TASKS', todolistId, tasks}) as const
+export const setTasksAC = (todolistId: string, tasks: Array<TaskType>) => ({type: 'SET-TASKS', todolistId, tasks}) as const
 
-export const setTasksTC = (title: string, todolistId: string) => {
+export const setTasksTC = (todolistId: string) => {
     return (dispatch: Dispatch) => {
-        todolistApi.createTasks(todolistId, title)
+        todolistsAPI.getTasks(todolistId)
             .then((res) => {
-                dispatch(addTaskAC(title, todolistId))
-            })
-    }
-}
-export const fetchTasksTC = (todolistId: string) => {
-    return (dispatch: Dispatch) => {
-        todolistApi.getTasks(todolistId)
-            .then((res) => {
-                const tasks = res.data.items
+                let tasks = res.data.items
                 dispatch(setTasksAC(todolistId, tasks))
             })
     }
 }
 
+export const removeTaskTC = (todolistId: string, taskId: string) => {
+    return (dispatch: Dispatch) => {
+        todolistsAPI.deleteTask(todolistId, taskId)
+            .then((res) => {
+
+            })
+    }
+}
 
