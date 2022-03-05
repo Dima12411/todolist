@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import './App.css'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import AppBar from '@mui/material/AppBar';
@@ -11,6 +11,7 @@ import { Menu } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress';
 import {useAppSelector} from "./store";
 import {RequestStatusType} from "./app-reducer";
+import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 
 
 function App() {
@@ -28,10 +29,14 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
+
             {status === 'loading' && <LinearProgress color="secondary"/>}
+
             <Container fixed>
                 <TodolistsList/>
             </Container>
+
+            <ErrorSnackbar/>
         </div>
     )
 }
