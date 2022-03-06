@@ -41,6 +41,7 @@ export const Login = () => {
         },
         onSubmit: values => {
             alert(JSON.stringify(values));
+            formik.resetForm();
         },
     })
 
@@ -62,10 +63,8 @@ export const Login = () => {
                     <FormGroup>
                         <TextField label="Email"
                                    margin="normal"
-                                   name="email"
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.email}/>
+                                   {...formik.getFieldProps('email')}
+                        />
                         {formik.touched.email
                             && formik.errors.email
                             && <div style={{color: 'red'}}>
@@ -73,10 +72,7 @@ export const Login = () => {
                         <TextField type="password"
                                    label="Password"
                                    margin="normal"
-                                   name="password"
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.password}
+                                   {...formik.getFieldProps('password')}
                         />
                         {formik.touched.password
                             && formik.errors.password
@@ -84,9 +80,8 @@ export const Login = () => {
                                 {formik.errors.password}</div>}
                         <FormControlLabel label={'Remember me'}
                                           control={<Checkbox
-                                              onChange={formik.handleChange}
-                                              checked={formik.values.rememberMe}
-                                              name="rememberMe"/>}/>
+                                              {...formik.getFieldProps('rememberMe')}/>}
+                        />
                         <Button type={'submit'} variant={'contained'} color={'primary'}>
                             Login
                         </Button>
