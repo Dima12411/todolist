@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
-import { useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import { AppRootStateType } from './store'
-import { RequestStatusType } from './app-reducer'
+import {initializeAppTC, RequestStatusType} from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -15,12 +15,25 @@ import { Menu } from '@mui/icons-material';
 import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes } from 'react-router-dom'
+import {authAPI} from "../api/todolists-api";
 
 type PropsType = {
     demo?: boolean
 }
 
 function App({demo = false}: PropsType) {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        authAPI.me()
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(initializeAppTC())
+                }
+            })
+    }, [])
+
     const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
     return (
         <div className="App">
