@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import './App.css'
 import { TodolistsList } from '../features/TodolistsList/TodolistsList'
 import {useDispatch, useSelector} from 'react-redux'
@@ -16,6 +16,9 @@ import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes } from 'react-router-dom'
 import {authAPI} from "../api/todolists-api";
+import CircularProgress from "@mui/material/CircularProgress";
+import {logoutTC} from "../features/Login/authReducer";
+
 
 type PropsType = {
     demo?: boolean
@@ -23,7 +26,13 @@ type PropsType = {
 
 function App({demo = false}: PropsType) {
 
+    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+
     const dispatch = useDispatch()
+
+
 
     useEffect(() => {
         authAPI.me()
@@ -34,7 +43,17 @@ function App({demo = false}: PropsType) {
             })
     }, [])
 
-    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+    const logoutHandler = useCallback(function() {
+        dispatch(logoutTC())
+    }, [])
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
     return (
         <div className="App">
             <ErrorSnackbar/>
@@ -46,7 +65,7 @@ function App({demo = false}: PropsType) {
                     <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Logout</Button>}
                 </Toolbar>
                 {status === 'loading' && <LinearProgress/>}
             </AppBar>
